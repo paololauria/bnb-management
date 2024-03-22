@@ -1,13 +1,13 @@
 package com.paololauria.bnb.api.restcontrollers;
 import com.paololauria.bnb.dtos.BookingRequestDto;
+import com.paololauria.bnb.dtos.RoomAvailabilityDto;
 import com.paololauria.bnb.model.entities.Booking;
 import com.paololauria.bnb.services.abstraction.BookingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("api/bookings")
@@ -20,9 +20,12 @@ public class BookingController {
 
     @PostMapping("/make")
     public ResponseEntity<Booking> makeBooking(@RequestBody BookingRequestDto bookingRequest) {
+
+        Long userId = bookingRequest.getUserId();
+
         Booking booking = bookingService.makeBooking(
                 bookingRequest.getRoomId(),
-                bookingRequest.getGuestName(),
+                userId,
                 bookingRequest.getCheckInDate(),
                 bookingRequest.getCheckOutDate()
         );
@@ -37,13 +40,22 @@ public class BookingController {
         return new ResponseEntity<>(booking, HttpStatus.CREATED);
     }
 
-    @PostMapping("/check-availability")
-    public ResponseEntity<Boolean> checkAvailability(@RequestBody BookingRequestDto bookingRequest) {
-        boolean isAvailable = bookingService.checkAvailability(
-                bookingRequest.getRoomId(),
-                bookingRequest.getCheckInDate(),
-                bookingRequest.getCheckOutDate()
-        );
-        return new ResponseEntity<>(isAvailable, HttpStatus.OK);
+    @GetMapping("/booked-dates")
+    public ResponseEntity<List<RoomAvailabilityDto>> getBookedDates() {
+        List<RoomAvailabilityDto> bookedDates = bookingService.getBookedDates();
+        return new ResponseEntity<>(bookedDates, HttpStatus.OK);
     }
+
+
+    @GetMapping("{userId}/confirm")
+    public ResponseEntity<List<Booking>> getUserBookings(@PathVariable Long userId) {
+        List<Booking> userBookings = bookingService.getUserBookings(userId);
+
+        if (userBookings.isEmpty()) {
+            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+        } else {
+            return new ResponseEntity<>(userBookings, HttpStatus.OK);
+        }
+    }
+
 }

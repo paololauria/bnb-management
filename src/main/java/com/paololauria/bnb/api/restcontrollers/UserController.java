@@ -4,10 +4,13 @@ import com.paololauria.bnb.dtos.UserDto;
 import com.paololauria.bnb.model.entities.User;
 import com.paololauria.bnb.services.abstraction.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -47,4 +50,26 @@ public class UserController {
         return ResponseEntity.ok(result);
 
     }
+
+    @PostMapping("/{userId}/profile-image")
+    public ResponseEntity<String> updateUserProfileImage(@PathVariable Long userId,
+                                                         @RequestBody String imageUrl,
+                                                         @AuthenticationPrincipal User userDto) {
+        Long loggedInUserId = userDto.getId();
+        if (!userId.equals(loggedInUserId)) {
+            return ResponseEntity.status(HttpStatus.FORBIDDEN)
+                    .body("Non sei autorizzato ad aggiornare l'immagine del profilo di questo utente");
+        }
+
+        try {
+            String updatedImageUrl = userService.updateUserProfileImage(userId, imageUrl);
+            return ResponseEntity.ok(updatedImageUrl);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Errore durante l'aggiornamento dell'immagine del profilo: " + e.getMessage());
+        }
+    }
+
+
+
 }

@@ -10,4 +10,5 @@ public interface UserService {
     List<User> findAllUser();
     Optional<User> findById(Long id);
     void createUser(User newUser, User user);
+    String updateUserProfileImage(Long userId, String imageUrl);
 }

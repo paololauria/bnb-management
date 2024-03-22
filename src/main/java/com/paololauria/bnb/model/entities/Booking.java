@@ -1,4 +1,5 @@
 package com.paololauria.bnb.model.entities;
+
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -9,10 +10,15 @@ public class Booking {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long bookingId;
+
     @ManyToOne
     @JoinColumn(name = "room_id", referencedColumnName = "roomId")
     private Room room;
-    private String guestName;
+
+    @ManyToOne
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    private User user;
+
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
     private BigDecimal totalPrice;
@@ -36,12 +42,12 @@ public class Booking {
         this.room = room;
     }
 
-    public String getGuestName() {
-        return guestName;
+    public User getUser() {
+        return user;
     }
 
-    public void setGuestName(String guestName) {
-        this.guestName = guestName;
+    public void setUser(User user) {
+        this.user = user;
     }
 
     public LocalDate getCheckInDate() {

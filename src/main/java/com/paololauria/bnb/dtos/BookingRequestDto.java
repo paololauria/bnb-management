@@ -6,7 +6,7 @@ import java.time.LocalDate;
 
 public class BookingRequestDto {
     private Long roomId;
-    private String guestName;
+    private Long userId;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
 
@@ -14,7 +14,7 @@ public class BookingRequestDto {
 
     public BookingRequestDto(Booking booking) {
         this.roomId = booking.getRoom().getRoomId();
-        this.guestName = booking.getGuestName();
+        this.userId = booking.getUser().getId();
         this.checkInDate = booking.getCheckInDate();
         this.checkOutDate = booking.getCheckOutDate();
     }
@@ -27,12 +27,12 @@ public class BookingRequestDto {
         this.roomId = roomId;
     }
 
-    public String getGuestName() {
-        return guestName;
+    public Long getUserId() {
+        return userId;
     }
 
-    public void setGuestName(String guestName) {
-        this.guestName = guestName;
+    public void setUserId(Long userId) {
+        this.userId = userId;
     }
 
     public LocalDate getCheckInDate() {
