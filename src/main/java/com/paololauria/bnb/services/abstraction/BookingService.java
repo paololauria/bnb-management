@@ -15,6 +15,9 @@ public interface BookingService {
 
     List<RoomAvailabilityDto> getBookedDates();
 
+    boolean isCancellationAllowed(Long bookingId);
+    void cancelBooking(Long bookingId);
+
     List<Booking> getUserBookings(Long userId);
 
 

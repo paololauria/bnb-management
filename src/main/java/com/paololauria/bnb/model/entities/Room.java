@@ -1,20 +1,41 @@
 package com.paololauria.bnb.model.entities;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
+import java.util.List;
 
 @Entity
 @Table(name = "Rooms")
 public class Room {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "room_id")
     private Long roomId;
     private String roomName;
-    private String roomType;
+    private Integer maxGuest;
     private BigDecimal pricePerNight;
     private String roomCover;
     private String description;
+    private String location;
+    @JsonIgnore
+    @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
+    private List<Review> reviews;
+
 
     public Room() {
+    }
+
+
+
+    public Double calculateAverageRating() {
+        if (reviews == null || reviews.isEmpty()){
+            return 0.0;
+        }
+        int totalRating = 0;
+        for (Review review : reviews) {
+            totalRating += review.getRating();
+        }
+        return (double) (totalRating / reviews.size());
     }
 
     public Long getRoomId() {
@@ -33,12 +54,12 @@ public class Room {
         this.roomName = roomName;
     }
 
-    public String getRoomType() {
-        return roomType;
+    public Integer getMaxGuest() {
+        return maxGuest;
     }
 
-    public void setRoomType(String roomType) {
-        this.roomType = roomType;
+    public void setMaxGuest(Integer maxGuest) {
+        this.maxGuest = maxGuest;
     }
 
     public BigDecimal getPricePerNight() {
@@ -63,5 +84,21 @@ public class Room {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
+    }
+
+    public List<Review> getReviews() {
+        return reviews;
+    }
+
+    public void setReviews(List<Review> reviews) {
+        this.reviews = reviews;
     }
 }

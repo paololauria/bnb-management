@@ -29,7 +29,7 @@ public class BnbApplication {
 				RegisterRequestDto paolo = new RegisterRequestDto(
 						"Paolo", "Lauria",
 						email, "1234",
-						"1996-12-20", ADMIN);
+						"1996-12-20", "url1.jpg", ADMIN);
 
 				System.out.println("Token: " + service.register(paolo).getAccessToken());
 			} else {

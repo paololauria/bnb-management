@@ -58,4 +58,15 @@ public class BookingController {
         }
     }
 
+    @PostMapping("/cancel/{bookingId}")
+    public ResponseEntity<Void> cancelBooking(@PathVariable Long bookingId) {
+        boolean cancellationAllowed = bookingService.isCancellationAllowed(bookingId);
+
+        if (cancellationAllowed) {
+            bookingService.cancelBooking(bookingId);
+            return new ResponseEntity<>(HttpStatus.OK);
+        } else {
+            return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
 }

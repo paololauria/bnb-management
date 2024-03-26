@@ -97,4 +97,30 @@ public class JPABookingService implements BookingService {
         List<Booking> overlappingBookings = bookingRepository.findOverlappingBookings(room.getRoomId(), checkInDate, checkOutDate);
         return overlappingBookings.isEmpty();
     }
+
+    @Override
+    public boolean isCancellationAllowed(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId).orElse(null);
+
+        if (booking != null) {
+            LocalDate currentDate = LocalDate.now();
+            LocalDate checkInDate = booking.getCheckInDate();
+
+            // Controlla se la data corrente è entro i 30 giorni dal check-in
+            return currentDate.isBefore(checkInDate.minusDays(30));
+        } else {
+            return false;
+        }
+    }
+
+    @Override
+    public void cancelBooking(Long bookingId) {
+        Booking booking = bookingRepository.findById(bookingId).orElse(null);
+
+        if (booking != null) {
+            bookingRepository.delete(booking);
+            // Aggiornare la disponibilità della stanza, ad esempio impostare nuovamente disponibile il periodo prenotato
+            updateRoomAvailability(booking.getRoom(), booking.getCheckInDate(), booking.getCheckOutDate(), true);
+        }
+    }
 }

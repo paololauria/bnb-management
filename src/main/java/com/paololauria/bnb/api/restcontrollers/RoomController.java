@@ -1,8 +1,11 @@
 package com.paololauria.bnb.api.restcontrollers;
 
+import com.paololauria.bnb.dtos.ReviewDto;
 import com.paololauria.bnb.dtos.RoomDetailsDto;
+import com.paololauria.bnb.model.entities.Review;
 import com.paololauria.bnb.model.entities.Room;
 import com.paololauria.bnb.services.abstraction.RoomService;
+import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -41,4 +44,15 @@ public class RoomController {
             return ResponseEntity.notFound().build();
         }
     }
+
+    @GetMapping("/{roomId}/review")
+    public ResponseEntity<List<ReviewDto>> getReviewByRoomId(@PathVariable long roomId) {
+        List<Review> reviews = roomService.findAllReviewByRoomId(roomId);
+        if (reviews.isEmpty()) {
+            return ResponseEntity.noContent().build();
+        }
+        List<ReviewDto> reviewDtos = reviews.stream().map(ReviewDto::new).toList();
+        return ResponseEntity.ok(reviewDtos);
+    }
+
 }

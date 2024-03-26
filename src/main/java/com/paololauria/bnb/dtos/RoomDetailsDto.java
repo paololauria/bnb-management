@@ -7,10 +7,12 @@ import java.math.BigDecimal;
 public class RoomDetailsDto {
     private Long roomId;
     private String roomName;
-    private String roomType;
+    private Integer maxGuest;
     private BigDecimal pricePerNight;
     private String roomCover;
     private String description;
+    private double averageRating;
+    private String location;
 
     public RoomDetailsDto(){
 
@@ -19,10 +21,12 @@ public class RoomDetailsDto {
     public RoomDetailsDto(Room room){
         roomId = room.getRoomId();
         roomName = room.getRoomName();
-        roomType = room.getRoomType();
+        maxGuest = room.getMaxGuest();
         pricePerNight = room.getPricePerNight();
         roomCover = room.getRoomCover();
         description = room.getDescription();
+        averageRating = room.calculateAverageRating();
+        location = room.getLocation();
     }
 
 
@@ -42,12 +46,12 @@ public class RoomDetailsDto {
         this.roomName = roomName;
     }
 
-    public String getRoomType() {
-        return roomType;
+    public Integer getMaxGuest() {
+        return maxGuest;
     }
 
-    public void setRoomType(String roomType) {
-        this.roomType = roomType;
+    public void setMaxGuest(Integer maxGuest) {
+        this.maxGuest = maxGuest;
     }
 
     public BigDecimal getPricePerNight() {
@@ -72,5 +76,21 @@ public class RoomDetailsDto {
 
     public void setDescription(String description) {
         this.description = description;
+    }
+
+    public double getAverageRating() {
+        return averageRating;
+    }
+
+    public void setAverageRating(double averageRating) {
+        this.averageRating = averageRating;
+    }
+
+    public String getLocation() {
+        return location;
+    }
+
+    public void setLocation(String location) {
+        this.location = location;
     }
 }

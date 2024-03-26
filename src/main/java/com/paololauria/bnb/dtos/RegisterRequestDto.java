@@ -9,6 +9,7 @@ public class RegisterRequestDto {
     private String password;
     private String birthdate;
     private Role role;
+    private String image;
 
 
 
@@ -16,13 +17,14 @@ public class RegisterRequestDto {
     public RegisterRequestDto() {
     }
 
-    public RegisterRequestDto(String firstname, String lastname, String email, String password, String birthdate, Role role) {
+    public RegisterRequestDto(String firstname, String lastname, String email, String password, String birthdate, String image, Role role) {
         this.firstname = firstname;
         this.lastname = lastname;
         this.email = email;
         this.password = password;
         this.role = role;
         this.birthdate = birthdate;
+        this.image = image;
     }
 
 
@@ -72,5 +74,13 @@ public class RegisterRequestDto {
 
     public void setBirthdate(String birthdate) {
         this.birthdate = birthdate;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 }
