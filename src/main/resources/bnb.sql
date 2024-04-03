@@ -78,14 +78,20 @@ CREATE TABLE public.room_availability (
 
 CREATE TABLE public.amenities (
     amenity_id SERIAL PRIMARY KEY,
-    room_id INT REFERENCES rooms(room_id) ON DELETE CASCADE,
-    amenity_name VARCHAR(255) NOT NULL
+    amenity_name VARCHAR(255) NOT NULL,
     amenity_image VARCHAR(500) NOT NULL
+);
+
+CREATE TABLE public.room_amenities (
+    room_id INT REFERENCES rooms(room_id) ON DELETE CASCADE,
+    amenity_id INT REFERENCES amenities(amenity_id) ON DELETE CASCADE,
+    PRIMARY KEY (room_id, amenity_id)
 );
 
 CREATE TABLE public.reviews (
     review_id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES _user(user_id) ON DELETE CASCADE,
+    booking_id INTEGER REFERENCES bookings(booking_id) ON DELETE CASCADE,
     room_id INT REFERENCES rooms(room_id) ON DELETE CASCADE,
     rating INTEGER,
     comment TEXT,

@@ -21,21 +21,30 @@ public class Room {
     @OneToMany(mappedBy = "room", cascade = CascadeType.ALL)
     private List<Review> reviews;
 
+    @JsonIgnore
+    @ManyToMany(cascade = { CascadeType.ALL })
+    @JoinTable(
+            name = "room_amenities",
+            joinColumns = { @JoinColumn(name = "room_id") },
+            inverseJoinColumns = { @JoinColumn(name = "amenity_id") }
+    )
+    private List<Amenities> amenities;
 
-    public Room() {
-    }
-
-
+    public Room() {}
 
     public Double calculateAverageRating() {
-        if (reviews == null || reviews.isEmpty()){
+        if (reviews == null || reviews.isEmpty()) {
             return 0.0;
         }
         int totalRating = 0;
+        int count = 0;
         for (Review review : reviews) {
-            totalRating += review.getRating();
+            if (review.getRating() != null) {
+                totalRating += review.getRating();
+                count++;
+            }
         }
-        return (double) (totalRating / reviews.size());
+        return count > 0 ? (double) totalRating / count : 0.0;
     }
 
     public Long getRoomId() {
@@ -100,5 +109,13 @@ public class Room {
 
     public void setReviews(List<Review> reviews) {
         this.reviews = reviews;
+    }
+
+    public List<Amenities> getAmenities() {
+        return amenities;
+    }
+
+    public void setAmenities(List<Amenities> amenities) {
+        this.amenities = amenities;
     }
 }

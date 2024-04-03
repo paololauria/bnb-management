@@ -6,21 +6,27 @@ import java.time.LocalDate;
 
 public class BookingRequestDto {
     private Long bookingId;
+    private String roomName;
     private Long roomId;
     private Long userId;
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
     private String roomCover;
+    private Double totalPrice;
+    private Integer maxGuestRoom;
 
     public BookingRequestDto() {}
 
     public BookingRequestDto(Booking booking) {
         this.bookingId = booking.getBookingId();
         this.roomId = booking.getRoom().getRoomId();
+        this.roomName = booking.getRoom().getRoomName();
         this.userId = booking.getUser().getId();
         this.checkInDate = booking.getCheckInDate();
         this.checkOutDate = booking.getCheckOutDate();
         this.roomCover = booking.getRoomCover();
+        this.totalPrice = booking.getTotalPrice().doubleValue();
+        this.maxGuestRoom = booking.getRoom().getMaxGuest();
     }
 
     public Long getRoomId() {
@@ -69,5 +75,29 @@ public class BookingRequestDto {
 
     public void setBookingId(Long bookingId) {
         this.bookingId = bookingId;
+    }
+
+    public Double getTotalPrice() {
+        return totalPrice;
+    }
+
+    public void setTotalPrice(Double totalPrice) {
+        this.totalPrice = totalPrice;
+    }
+
+    public String getRoomName() {
+        return roomName;
+    }
+
+    public void setRoomName(String roomName) {
+        this.roomName = roomName;
+    }
+
+    public Integer getMaxGuestRoom() {
+        return maxGuestRoom;
+    }
+
+    public void setMaxGuestRoom(Integer maxGuestRoom) {
+        this.maxGuestRoom = maxGuestRoom;
     }
 }

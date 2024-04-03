@@ -5,6 +5,7 @@ import com.paololauria.bnb.dtos.UserDto;
 import com.paololauria.bnb.model.entities.Review;
 import com.paololauria.bnb.model.entities.Room;
 import com.paololauria.bnb.model.entities.User;
+import com.paololauria.bnb.services.abstraction.BookingService;
 import com.paololauria.bnb.services.abstraction.RoomService;
 import com.paololauria.bnb.services.abstraction.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -28,11 +29,13 @@ import java.util.Optional;
 public class UserController {
     UserService userService;
     RoomService roomService;
+    BookingService bookingService;
 
     @Autowired
-    public UserController(UserService userService, RoomService roomService) {
+    public UserController(UserService userService, RoomService roomService, BookingService bookingService) {
         this.userService = userService;
         this.roomService = roomService;
+        this.bookingService = bookingService;
     }
 
 
@@ -102,15 +105,23 @@ public class UserController {
     @PostMapping("/{roomId}/review")
     public ResponseEntity<ReviewDto> createReview(@RequestBody ReviewDto reviewDto, @AuthenticationPrincipal User user, @PathVariable long roomId) throws URISyntaxException {
         Room room = roomService.findById(roomId);
-        Optional<User> u = userService.findById(user.getId());
-        if(u.isPresent()){
-            Review rw = reviewDto.fromDto(room, u.get());
-            roomService.createReview(rw, user);
-            URI location = new URI("/api/user/review/" + rw.getId());
-            ReviewDto created = new ReviewDto(rw);
-            return ResponseEntity.created(location).body(created);}
-        else {
-            return ResponseEntity.badRequest().build();}
+
+        if (room != null) {
+            // Verifica se l'utente ha effettuato una prenotazione per la stanza specificata e se il soggiorno è terminato
+            boolean canReview = bookingService.canReview(user.getId(), roomId);
+
+            if (canReview) {
+                Review review = reviewDto.fromDto(room, user);
+                roomService.createReview(review, user);
+                URI location = new URI("/api/user/review/" + review.getId());
+                ReviewDto createdReviewDto = new ReviewDto(review);
+                return ResponseEntity.created(location).body(createdReviewDto);
+            } else {
+                return ResponseEntity.badRequest().build();
+            }
+        } else {
+            return ResponseEntity.notFound().build();
+        }
     }
 
 

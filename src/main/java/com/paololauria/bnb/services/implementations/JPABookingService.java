@@ -6,10 +6,7 @@ import com.paololauria.bnb.model.entities.Room;
 import com.paololauria.bnb.model.entities.RoomAvailability;
 import com.paololauria.bnb.model.entities.User;
 import com.paololauria.bnb.model.exceptions.UnauthorizedOperationException;
-import com.paololauria.bnb.model.repository.abstractions.BookingRepository;
-import com.paololauria.bnb.model.repository.abstractions.RoomAvailabilityRepository;
-import com.paololauria.bnb.model.repository.abstractions.RoomRepository;
-import com.paololauria.bnb.model.repository.abstractions.UserRepository;
+import com.paololauria.bnb.model.repository.abstractions.*;
 import com.paololauria.bnb.services.abstraction.BookingService;
 import org.springframework.stereotype.Service;
 
@@ -17,6 +14,7 @@ import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.temporal.ChronoUnit;
 import java.util.List;
+import java.util.Optional;
 import java.util.stream.Collectors;
 
 @Service
@@ -25,12 +23,14 @@ public class JPABookingService implements BookingService {
     private final RoomRepository roomRepository;
     private final RoomAvailabilityRepository roomAvailabilityRepository;
     private final UserRepository userRepository;
+    private final ReviewRepository reviewRepository;
 
-    public JPABookingService(BookingRepository bookingRepository, RoomRepository roomRepository, RoomAvailabilityRepository roomAvailabilityRepository, UserRepository userRepository) {
+    public JPABookingService(BookingRepository bookingRepository, RoomRepository roomRepository, RoomAvailabilityRepository roomAvailabilityRepository, UserRepository userRepository, ReviewRepository reviewRepository) {
         this.bookingRepository = bookingRepository;
         this.roomRepository = roomRepository;
         this.roomAvailabilityRepository = roomAvailabilityRepository;
         this.userRepository = userRepository;
+        this.reviewRepository = reviewRepository;
     }
 
     @Override
@@ -88,12 +88,18 @@ public class JPABookingService implements BookingService {
         return bookingRepository.findByUserId(userId);
     }
 
+    @Override
+    public Booking findById(Long id) {
+        Optional<Booking> bookingOptional = bookingRepository.findById(id);
+        return bookingOptional.orElse(null);
+    }
+
     private BigDecimal calculateTotalPrice(BigDecimal pricePerNight, LocalDate checkInDate, LocalDate checkOutDate) {
         long numNights = ChronoUnit.DAYS.between(checkInDate, checkOutDate);
         return pricePerNight.multiply(BigDecimal.valueOf(numNights));
     }
 
-    private boolean isRoomAvailable(Room room, LocalDate checkInDate, LocalDate checkOutDate) {
+    public boolean isRoomAvailable(Room room, LocalDate checkInDate, LocalDate checkOutDate) {
         List<Booking> overlappingBookings = bookingRepository.findOverlappingBookings(room.getRoomId(), checkInDate, checkOutDate);
         return overlappingBookings.isEmpty();
     }
@@ -123,4 +129,37 @@ public class JPABookingService implements BookingService {
             updateRoomAvailability(booking.getRoom(), booking.getCheckInDate(), booking.getCheckOutDate(), true);
         }
     }
+
+    @Override
+    public boolean canReview(Long userId, Long roomId) {
+        // Trova tutte le prenotazioni dell'utente per la stanza specificata
+        List<Booking> userBookings = bookingRepository.findByUserIdAndRoomRoomId(userId, roomId);
+
+        // Verifica se l'utente ha prenotazioni per la stanza specificata
+        if (!userBookings.isEmpty()) {
+            // Scansiona tutte le prenotazioni dell'utente per la stanza
+            for (Booking booking : userBookings) {
+                // Ottieni la data di check-out di ciascuna prenotazione
+                LocalDate checkOutDate = booking.getCheckOutDate();
+
+                // Verifica se la data corrente è successiva alla data di check-out della prenotazione
+                if (LocalDate.now().isAfter(checkOutDate)) {
+                    // Controlla se l'utente ha già lasciato una recensione per questa prenotazione
+                    boolean hasReviewed = reviewRepository.existsByBookingAndUser(booking, booking.getUser());
+
+                    // Se l'utente non ha ancora lasciato una recensione per questa prenotazione,
+                    // allora può lasciare una recensione
+                    if (!hasReviewed) {
+                        return true;
+                    }
+                }
+            }
+        }
+
+        // Se l'utente non ha prenotazioni per la stanza specificata
+        // o se ha già lasciato una recensione per tutte le prenotazioni valide,
+        // restituisci false
+        return false;
+    }
+
 }

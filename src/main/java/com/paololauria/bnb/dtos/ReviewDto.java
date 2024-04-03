@@ -9,7 +9,6 @@ import java.util.Date;
 
 public class ReviewDto {
 
-    private Long reviewId;
     private String userName;
     private String roomName;
     private Integer rating;
@@ -20,7 +19,6 @@ public class ReviewDto {
     }
 
     public ReviewDto(Review review) {
-        this.reviewId = review.getId();
         this.userName = review.getUser().getFirstname();
         this.roomName = review.getRoom().getRoomName();
         this.rating = review.getRating();
@@ -34,13 +32,6 @@ public class ReviewDto {
         rw.setRoom(room);
         rw.setUser(user);
         return rw;
-    }
-    public Long getReviewId() {
-        return reviewId;
-    }
-
-    public void setReviewId(Long reviewId) {
-        this.reviewId = reviewId;
     }
 
     public String getUserName() {

@@ -1,13 +1,16 @@
 package com.paololauria.bnb.api.restcontrollers;
 import com.paololauria.bnb.dtos.BookingRequestDto;
 import com.paololauria.bnb.dtos.RoomAvailabilityDto;
+import com.paololauria.bnb.dtos.RoomDetailsDto;
 import com.paololauria.bnb.model.entities.Booking;
+import com.paololauria.bnb.model.entities.Room;
 import com.paololauria.bnb.services.abstraction.BookingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/bookings")
@@ -19,7 +22,7 @@ public class BookingController {
     }
 
     @PostMapping("/make")
-    public ResponseEntity<Booking> makeBooking(@RequestBody BookingRequestDto bookingRequest) {
+    public ResponseEntity<BookingRequestDto> makeBooking(@RequestBody BookingRequestDto bookingRequest) {
 
         Long userId = bookingRequest.getUserId();
 
@@ -36,9 +39,10 @@ public class BookingController {
                 booking.getCheckOutDate(),
                 false
         );
-
-        return new ResponseEntity<>(booking, HttpStatus.CREATED);
+        BookingRequestDto bookingRequestDto = new BookingRequestDto(booking);
+        return new ResponseEntity<>(bookingRequestDto, HttpStatus.CREATED);
     }
+
 
     @GetMapping("/booked-dates")
     public ResponseEntity<List<RoomAvailabilityDto>> getBookedDates() {
@@ -48,13 +52,14 @@ public class BookingController {
 
 
     @GetMapping("{userId}/confirm")
-    public ResponseEntity<List<Booking>> getUserBookings(@PathVariable Long userId) {
+    public ResponseEntity<List<BookingRequestDto>> getUserBookings(@PathVariable Long userId) {
         List<Booking> userBookings = bookingService.getUserBookings(userId);
+        List<BookingRequestDto> requestDtos = userBookings.stream().map(BookingRequestDto::new).toList();
 
         if (userBookings.isEmpty()) {
             return new ResponseEntity<>(HttpStatus.NO_CONTENT);
         } else {
-            return new ResponseEntity<>(userBookings, HttpStatus.OK);
+            return new ResponseEntity<>(requestDtos, HttpStatus.OK);
         }
     }
 
@@ -67,6 +72,17 @@ public class BookingController {
             return new ResponseEntity<>(HttpStatus.OK);
         } else {
             return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    @GetMapping("/{bookingId}")
+    public ResponseEntity<BookingRequestDto> getBookingDetailsById(@PathVariable long bookingId) {
+        Booking booking = bookingService.findById(bookingId);
+        if (booking != null) {
+            BookingRequestDto result = new BookingRequestDto(booking);
+            return ResponseEntity.ok(result);
+        } else {
+            return ResponseEntity.notFound().build();
         }
     }
 }

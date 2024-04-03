@@ -12,13 +12,15 @@ public interface BookingService {
     Booking makeBooking(Long roomId, Long userId,
                         LocalDate checkInDate, LocalDate checkOutDate);
     void updateRoomAvailability(Room room, LocalDate checkInDate, LocalDate checkOutDate, boolean isAvailable);
-
+    boolean isRoomAvailable(Room room, LocalDate checkInDate, LocalDate checkOutDate);
     List<RoomAvailabilityDto> getBookedDates();
 
     boolean isCancellationAllowed(Long bookingId);
     void cancelBooking(Long bookingId);
+    boolean canReview(Long userId, Long roomId);
 
     List<Booking> getUserBookings(Long userId);
+    Booking findById(Long id);
 
 
 }

@@ -19,6 +19,10 @@ import java.util.Date;
         @JoinColumn(name = "room_id")
         private Room room;
 
+        @ManyToOne
+        @JoinColumn(name = "booking_id")
+        private Booking booking;
+
         @Column(name = "rating")
         private Integer rating;
 
@@ -33,6 +37,8 @@ import java.util.Date;
         }
 
         public Review(Integer rating, String comment) {
+            this.rating = rating;
+            this.comment = comment;
         }
 
         public Long getId() {
@@ -83,4 +89,11 @@ import java.util.Date;
             this.timestamp = timestamp;
         }
 
+        public Booking getBooking() {
+            return booking;
+        }
+
+        public void setBooking(Booking booking) {
+            this.booking = booking;
+        }
     }

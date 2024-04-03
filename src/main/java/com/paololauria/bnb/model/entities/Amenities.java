@@ -1,57 +1,55 @@
 package com.paololauria.bnb.model.entities;
+
 import jakarta.persistence.*;
+import java.util.List;
+
+@Entity
+@Table(name = "amenities")
 public class Amenities {
-    @Entity
-    @Table(name = "amenities")
-    public class Amenity {
 
-        @Id
-        @GeneratedValue(strategy = GenerationType.IDENTITY)
-        @Column(name = "amenity_id")
-        private Long amenityId;
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    @Column(name = "amenity_id")
+    private Long amenityId;
 
-        @Column(name = "room_id")
-        private Long roomId;
+    @Column(name = "amenity_name", nullable = false)
+    private String amenityName;
 
-        @Column(name = "amenity_name", nullable = false)
-        private String amenityName;
+    @Column(name = "amenity_image", nullable = false)
+    private String amenityImage;
 
-        @Column(name = "amenity_image", nullable = false)
-        private String amenityImage;
+    @ManyToMany(mappedBy = "amenities")
+    private List<Room> rooms;
 
-        public Amenity() {
-        }
+    public Long getAmenityId() {
+        return amenityId;
+    }
 
-        public Long getAmenityId() {
-            return amenityId;
-        }
+    public void setAmenityId(Long amenityId) {
+        this.amenityId = amenityId;
+    }
 
-        public void setAmenityId(Long amenityId) {
-            this.amenityId = amenityId;
-        }
+    public String getAmenityName() {
+        return amenityName;
+    }
 
-        public Long getRoomId() {
-            return roomId;
-        }
+    public void setAmenityName(String amenityName) {
+        this.amenityName = amenityName;
+    }
 
-        public void setRoomId(Long roomId) {
-            this.roomId = roomId;
-        }
+    public String getAmenityImage() {
+        return amenityImage;
+    }
 
-        public String getAmenityName() {
-            return amenityName;
-        }
+    public void setAmenityImage(String amenityImage) {
+        this.amenityImage = amenityImage;
+    }
 
-        public void setAmenityName(String amenityName) {
-            this.amenityName = amenityName;
-        }
+    public List<Room> getRooms() {
+        return rooms;
+    }
 
-        public String getAmenityImage() {
-            return amenityImage;
-        }
-
-        public void setAmenityImage(String amenityImage) {
-            this.amenityImage = amenityImage;
-        }
+    public void setRooms(List<Room> rooms) {
+        this.rooms = rooms;
     }
 }

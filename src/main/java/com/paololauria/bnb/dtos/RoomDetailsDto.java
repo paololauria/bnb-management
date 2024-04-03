@@ -1,8 +1,12 @@
 package com.paololauria.bnb.dtos;
 
+import com.paololauria.bnb.model.entities.Amenities;
 import com.paololauria.bnb.model.entities.Room;
 
 import java.math.BigDecimal;
+import java.util.List;
+import java.util.Optional;
+import java.util.stream.Collectors;
 
 public class RoomDetailsDto {
     private Long roomId;
@@ -13,6 +17,8 @@ public class RoomDetailsDto {
     private String description;
     private double averageRating;
     private String location;
+    private List<AmenitiesDto> amenities;
+
 
     public RoomDetailsDto(){
 
@@ -25,8 +31,9 @@ public class RoomDetailsDto {
         pricePerNight = room.getPricePerNight();
         roomCover = room.getRoomCover();
         description = room.getDescription();
-        averageRating = room.calculateAverageRating();
+        averageRating = Optional.ofNullable(room.calculateAverageRating()).orElse(0.0);
         location = room.getLocation();
+        amenities = room.getAmenities().stream().map(AmenitiesDto::new).collect(Collectors.toList());
     }
 
 
@@ -92,5 +99,13 @@ public class RoomDetailsDto {
 
     public void setLocation(String location) {
         this.location = location;
+    }
+
+    public List<AmenitiesDto> getAmenities() {
+        return amenities;
+    }
+
+    public void setAmenities(List<AmenitiesDto> amenities) {
+        this.amenities = amenities;
     }
 }
