@@ -1,5 +1,4 @@
 package com.paololauria.bnb.services.implementations;
-
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;

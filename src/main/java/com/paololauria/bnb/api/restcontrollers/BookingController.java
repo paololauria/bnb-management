@@ -1,16 +1,12 @@
 package com.paololauria.bnb.api.restcontrollers;
 import com.paololauria.bnb.dtos.BookingRequestDto;
 import com.paololauria.bnb.dtos.RoomAvailabilityDto;
-import com.paololauria.bnb.dtos.RoomDetailsDto;
 import com.paololauria.bnb.model.entities.Booking;
-import com.paololauria.bnb.model.entities.Room;
 import com.paololauria.bnb.services.abstraction.BookingService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.util.List;
-import java.util.stream.Collectors;
 
 @RestController
 @RequestMapping("api/bookings")
@@ -19,6 +15,13 @@ public class BookingController {
 
     public BookingController(BookingService bookingService) {
         this.bookingService = bookingService;
+    }
+
+    @GetMapping("/all")
+    public ResponseEntity<List<BookingRequestDto>> getAllBookings() {
+        List<Booking> bookings = bookingService.findAllBookings();
+        List<BookingRequestDto> bookingRequestDtos = bookings.stream().map(BookingRequestDto::new).toList();
+        return ResponseEntity.ok(bookingRequestDtos);
     }
 
     @PostMapping("/make")
@@ -42,7 +45,6 @@ public class BookingController {
         BookingRequestDto bookingRequestDto = new BookingRequestDto(booking);
         return new ResponseEntity<>(bookingRequestDto, HttpStatus.CREATED);
     }
-
 
     @GetMapping("/booked-dates")
     public ResponseEntity<List<RoomAvailabilityDto>> getBookedDates() {

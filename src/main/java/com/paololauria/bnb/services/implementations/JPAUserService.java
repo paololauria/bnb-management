@@ -29,7 +29,7 @@ public class JPAUserService implements UserService {
             User savedUser = userRepository.save(user);
             return savedUser.getImage();
         } else {
-            throw new RuntimeException("Utente non trovato con ID: " + userId);
+            throw new RuntimeException("Utente con ID: " + userId + " non trovato");
         }
     }
 

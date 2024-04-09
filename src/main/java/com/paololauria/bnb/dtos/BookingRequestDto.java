@@ -1,6 +1,7 @@
 package com.paololauria.bnb.dtos;
-
 import com.paololauria.bnb.model.entities.Booking;
+import com.paololauria.bnb.model.entities.Room;
+import com.paololauria.bnb.model.entities.User;
 
 import java.time.LocalDate;
 
@@ -27,6 +28,21 @@ public class BookingRequestDto {
         this.roomCover = booking.getRoomCover();
         this.totalPrice = booking.getTotalPrice().doubleValue();
         this.maxGuestRoom = booking.getRoom().getMaxGuest();
+    }
+
+    public Booking fromDto(){
+        Room room = new Room();
+        room.setRoomId(this.roomId);
+
+        User user = new User();
+        user.setId(this.userId);
+
+        Booking booking = new Booking();
+        booking.setRoom(room);
+        booking.setUser(user);
+        booking.setCheckInDate(this.checkInDate);
+        booking.setCheckOutDate(this.checkOutDate);
+        return booking;
     }
 
     public Long getRoomId() {

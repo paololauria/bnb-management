@@ -1,26 +1,13 @@
 package com.paololauria.bnb.dtos;
 import java.time.LocalDate;
 
-public class RoomAvailabilityDto {
-    private Long roomId;
+public class UpdateBookingRequest {
     private LocalDate checkInDate;
     private LocalDate checkOutDate;
 
-    public RoomAvailabilityDto() {
-    }
-
-    public RoomAvailabilityDto(Long roomId, LocalDate checkInDate, LocalDate checkOutDate) {
-        this.roomId = roomId;
+    public UpdateBookingRequest(LocalDate checkInDate, LocalDate checkOutDate) {
         this.checkInDate = checkInDate;
         this.checkOutDate = checkOutDate;
-    }
-
-    public Long getRoomId() {
-        return roomId;
-    }
-
-    public void setRoomId(Long roomId) {
-        this.roomId = roomId;
     }
 
     public LocalDate getCheckInDate() {

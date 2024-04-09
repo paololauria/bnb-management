@@ -11,9 +11,6 @@ public class RegisterRequestDto {
     private Role role;
     private String image;
 
-
-
-
     public RegisterRequestDto() {
     }
 

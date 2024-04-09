@@ -1,5 +1,4 @@
 package com.paololauria.bnb.services.implementations;
-
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.paololauria.bnb.dtos.AuthenticationRequestDto;
 import com.paololauria.bnb.dtos.AuthenticationResponseDto;
@@ -23,7 +22,6 @@ import org.springframework.stereotype.Service;
 import java.io.IOException;
 import java.util.Date;
 @Service
-//@RequiredArgsConstructor
 public class AuthenticationService {
     private final UserRepository repository;
     private final TokenRepository tokenRepository;

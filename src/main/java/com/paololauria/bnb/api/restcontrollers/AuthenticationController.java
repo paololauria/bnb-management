@@ -1,5 +1,4 @@
 package com.paololauria.bnb.api.restcontrollers;
-
 import com.paololauria.bnb.dtos.AuthenticationRequestDto;
 import com.paololauria.bnb.dtos.AuthenticationResponseDto;
 import com.paololauria.bnb.dtos.ErrorResponseDto;
@@ -11,7 +10,6 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import java.io.IOException;
 
 @RestController

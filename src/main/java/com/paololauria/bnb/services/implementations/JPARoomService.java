@@ -32,6 +32,18 @@ public class JPARoomService implements RoomService {
     }
 
     @Override
+    public double getAverageOccupancyRate() {
+        List<Room> rooms = roomRepository.findAll();
+        int totalRooms = rooms.size();
+        int totalOccupiedRooms = (int) rooms
+                .stream()
+                .filter(room -> !bookingService.isRoomAvailable
+                        (room, LocalDate.now(), LocalDate.now().plusDays(1)))
+                .count();
+        return totalRooms > 0 ? ((double) totalOccupiedRooms / totalRooms) * 100 : 0;
+    }
+
+    @Override
     public Room findById(Long id) {
         Optional<Room> roomOptional = roomRepository.findById(id);
         return roomOptional.orElse(null);

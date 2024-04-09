@@ -1,13 +1,10 @@
 package com.paololauria.bnb.dtos;
-
-import com.paololauria.bnb.model.entities.Amenities;
 import com.paololauria.bnb.model.entities.Room;
 
 import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
-
 public class RoomDetailsDto {
     private Long roomId;
     private String roomName;

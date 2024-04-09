@@ -1,5 +1,4 @@
 package com.paololauria.bnb.config;
-
 import com.paololauria.bnb.model.repository.abstractions.TokenRepository;
 import com.paololauria.bnb.services.implementations.JwtService;
 import jakarta.servlet.FilterChain;

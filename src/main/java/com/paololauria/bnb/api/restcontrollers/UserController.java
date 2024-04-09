@@ -1,5 +1,4 @@
 package com.paololauria.bnb.api.restcontrollers;
-
 import com.paololauria.bnb.dtos.ReviewDto;
 import com.paololauria.bnb.dtos.UserDto;
 import com.paololauria.bnb.model.entities.Review;
@@ -13,10 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
-import org.springframework.web.multipart.MultipartFile;
-
 import java.net.URI;
 import java.net.URISyntaxException;
 import java.util.ArrayList;

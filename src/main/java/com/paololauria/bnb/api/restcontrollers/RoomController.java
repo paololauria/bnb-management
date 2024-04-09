@@ -1,22 +1,15 @@
 package com.paololauria.bnb.api.restcontrollers;
-
 import com.paololauria.bnb.dtos.ReviewDto;
 import com.paololauria.bnb.dtos.RoomDetailsDto;
 import com.paololauria.bnb.model.entities.Review;
 import com.paololauria.bnb.model.entities.Room;
 import com.paololauria.bnb.services.abstraction.RoomService;
-import io.swagger.v3.oas.annotations.Operation;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.format.annotation.DateTimeFormat;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
-
-import java.io.IOException;
 import java.time.LocalDate;
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/rooms")

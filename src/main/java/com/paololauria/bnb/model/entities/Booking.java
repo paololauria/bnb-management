@@ -1,7 +1,4 @@
 package com.paololauria.bnb.model.entities;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonIgnoreProperties;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
@@ -31,6 +28,22 @@ public class Booking {
     private boolean cancellable;
     public Booking() {
     }
+
+    public Booking(User user, Room room, Long bookingId, LocalDate checkInDate, LocalDate checkOutDate, BigDecimal totalPrice) {
+        this.user = user;
+        this.room = room;
+        this.bookingId = bookingId;
+        this.checkInDate = checkInDate;
+        this.checkOutDate = checkOutDate;
+        this.totalPrice = totalPrice;
+    }
+
+    public Booking(Long bookingId, Long roomId, LocalDate checkInDate, LocalDate checkOutDate) {
+    this.bookingId = bookingId;
+    this.checkInDate = checkInDate;
+    this.checkOutDate = checkOutDate;
+    }
+
 
     public Long getBookingId() {
         return bookingId;

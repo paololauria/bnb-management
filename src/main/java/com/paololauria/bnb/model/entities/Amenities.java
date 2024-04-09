@@ -1,5 +1,4 @@
 package com.paololauria.bnb.model.entities;
-
 import jakarta.persistence.*;
 import java.util.List;
 

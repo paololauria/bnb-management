@@ -1,7 +1,5 @@
 package com.paololauria.bnb.dtos;
-
 import com.paololauria.bnb.model.entities.User;
-
 import java.time.LocalDate;
 import java.util.List;
 import java.util.stream.Collectors;
