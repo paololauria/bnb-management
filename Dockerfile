@@ -9,7 +9,7 @@ WORKDIR /app
 # ... (Your build commands)
 
 # Generate the JAR file (assuming your build process generates it in the current directory)
-COPY ./*.jar /app/security-0.1.0.jar  # Adjust if the JAR has a different name
+COPY ./*.jar /bnb/security-0.1.0.jar
 
 # Stage 2: Runtime (Slim image with JAR file)
 
