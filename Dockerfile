@@ -2,7 +2,7 @@
 
 FROM openjdk:11-jdk AS builder
 
-WORKDIR /app
+WORKDIR /bnb
 
 # Build your backend application (excluding JAR generation)
 
@@ -18,7 +18,7 @@ FROM alpine:latest
 WORKDIR /bnb
 
 # Copy the JAR file from the build stage (no change)
-COPY --from=builder /app/security-0.1.0.jar /bnb/security-0.1.0.jar
+COPY --from=builder /bnb/security-0.1.0.jar /bnb/security-0.1.0.jar
 
 # Expose and run the application (no change)
 EXPOSE 8080
