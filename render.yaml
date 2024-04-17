@@ -1,0 +1,5 @@
+services:
+  - name: bnb
+    env: docker
+    buildCommand: docker build -t bnb .
+    startCommand: docker run -p 8080:8080 bnb

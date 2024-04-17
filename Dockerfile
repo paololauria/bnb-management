@@ -2,13 +2,13 @@
 FROM openjdk:11-jdk
 
 # Imposta la directory di lavoro all'interno del container
-WORKDIR /app
+WORKDIR /bnb
 
 # Copia il JAR compilato del tuo backend nella directory del container
-COPY target/nome-del-tuo-backend.jar /app/nome-del-tuo-backend.jar
+COPY target/security-0.1.0.jar /bnb/security-0.1.0.jar
 
 # Esponi la porta su cui il tuo backend ascolterà le richieste HTTP
 EXPOSE 8080
 
 # Comando da eseguire quando il container viene avviato
-CMD ["java", "-jar", "nome-del-tuo-backend.jar"]
+CMD ["java", "-jar", "security-0.1.0.jar"]
