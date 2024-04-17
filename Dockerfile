@@ -1,14 +1,25 @@
-# Usa un'immagine di base di Docker Hub che includa il runtime Java
-FROM openjdk:11-jdk
+# Stage 1: Build (No JAR file)
 
-# Imposta la directory di lavoro all'interno del container
+FROM openjdk:11-jdk AS builder
+
+WORKDIR /app
+
+# Build your backend application (excluding JAR generation)
+
+# ... (Your build commands)
+
+# Generate the JAR file (assuming your build process generates it in the current directory)
+COPY ./*.jar /app/security-0.1.0.jar  # Adjust if the JAR has a different name
+
+# Stage 2: Runtime (Slim image with JAR file)
+
+FROM alpine:latest
+
 WORKDIR /bnb
 
-# Copia il JAR compilato del tuo backend nella directory del container
-COPY target/security-0.1.0.jar /bnb/security-0.1.0.jar
+# Copy the JAR file from the build stage (no change)
+COPY --from=builder /app/security-0.1.0.jar /bnb/security-0.1.0.jar
 
-# Esponi la porta su cui il tuo backend ascolterà le richieste HTTP
+# Expose and run the application (no change)
 EXPOSE 8080
-
-# Comando da eseguire quando il container viene avviato
 CMD ["java", "-jar", "security-0.1.0.jar"]
